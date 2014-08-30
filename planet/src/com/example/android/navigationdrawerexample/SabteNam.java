@@ -33,13 +33,25 @@ public class SabteNam extends Activity {
 				TextView tname = (TextView) findViewById(R.id.txtTeamName);
 				TextView uname = (TextView) findViewById(R.id.txtUserName);
 				TextView pnumber = (TextView) findViewById(R.id.txtPhone);
-				Httpres hooman = new Httpres(SabteNam.this);
-				hooman.tnam = tname.getText().toString();
-				hooman.unam = uname.getText().toString();
-				hooman.pnum = pnumber.getText().toString();
+				
+				JSONObject json = new JSONObject();
+				try {
+					json.put("teamName", tname.getText().toString());
+					json.put("userName", uname.getText().toString());
+					json.put("phoneNumber", pnumber.getText().toString());
+				} catch (JSONException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				
+				Httpres hooman = new Httpres(SabteNam.this,"url",json.toString());///////////////////////////////////////
+			//	hooman.tnam = tname.getText().toString();
+			//	hooman.unam = uname.getText().toString();
+			//	hooman.pnum = pnumber.getText().toString();
 				hooman.execute();
 				try {
-					String tmp = hooman.get();
+					String tmp = hooman.get(); ///////////////////////////in nemidunam chie :( ////////////////////////
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();} 

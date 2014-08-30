@@ -1,13 +1,21 @@
 package com.example.android.navigationdrawerexample;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 
-import org.apache.http.HttpResponse;
+//import org.apache.http.HttpResponse;
+//import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+//import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+//import org.apache.http.message.BasicNameValuePair;
 
 
 import android.app.Dialog;
@@ -20,15 +28,14 @@ public class Httpres extends AsyncTask<Void, Void, String>
 {
 
 	private Context con;
-	public static String tnam;
-	public static String unam;
-	public static String pnum;
-	
-	private static String server_add = "http://192.168.56.1:5000/todo/api/v1.0/....../?teamName="+tnam+"&userName="+unam+"&phone="+pnum;
+	private static String server_add ;//= "http://192.168.56.1:5000/todo/api/v1.0/....../?teamName="+tnam+"&userName="+unam+"&phone="+pnum;
+	private static String param;
 
-	public Httpres(Context cn) {
+	public Httpres(Context cn, String serverAddress,String params) {
 		// TODO Auto-generated constructor stub
 		con = cn;
+		server_add = serverAddress;
+		param = params;
 	}
 
 
@@ -41,12 +48,12 @@ public class Httpres extends AsyncTask<Void, Void, String>
 	@Override
 	public String doInBackground(Void... params) 
 	{
-        HttpResponse response = null;
+      /*  HttpResponse response = null;
         InputStream in = null;
         String line = null;
 		try 
 		{
-			response = new DefaultHttpClient().execute(new HttpGet(server_add));
+			response = new DefaultHttpClient().execute(new HttpPost());//new HttpGet(server_add));
 			in = response.getEntity().getContent();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 	        StringBuilder str = new StringBuilder();
@@ -61,7 +68,36 @@ public class Httpres extends AsyncTask<Void, Void, String>
 			e.printStackTrace();
 		//	destory();
 			return "";
-		}
+		}*/
+		BufferedReader inBuffer = null;
+
+        String result = "fail";
+        try {
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpPost request = new HttpPost(server_add);
+            
+            request.setEntity(new StringEntity(param));//formEntity);
+             httpClient.execute(request);
+                    result="got it";
+
+        } catch(Exception e) {
+            
+            result = e.getMessage();
+        } finally {
+            if (inBuffer != null) {
+                try {
+                    inBuffer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return  result;
+	}
+	@Override
+	protected void onPostExecute(String result) {
+		// TODO Auto-generated method stub
+		super.onPostExecute(result);
 	}
 
 }
