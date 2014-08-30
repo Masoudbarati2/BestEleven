@@ -2,27 +2,16 @@ package com.example.android.navigationdrawerexample;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 
-//import org.apache.http.HttpResponse;
-//import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
-//import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-//import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.protocol.HTTP;
 
-
-import android.app.Dialog;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
-import android.util.Pair;
 
 public class Httpres extends AsyncTask<Void, Void, String>
 {
@@ -75,9 +64,10 @@ public class Httpres extends AsyncTask<Void, Void, String>
         try {
             HttpClient httpClient = new DefaultHttpClient();
             HttpPost request = new HttpPost(server_add);
-            
-            request.setEntity(new StringEntity(param));//formEntity);
-             httpClient.execute(request);
+            StringEntity se = new StringEntity(param);
+            se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+            request.setEntity(se);//formEntity);
+            httpClient.execute(request);
                     result="got it";
 
         } catch(Exception e) {
